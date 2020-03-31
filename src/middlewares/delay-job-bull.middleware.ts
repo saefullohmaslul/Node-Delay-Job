@@ -1,14 +1,18 @@
 import '../app/environment'
-import Bull from 'bull'
+import Bull, { Job, DoneCallback } from 'bull'
 
 export default class DelayJobBullMiddleware {
-  public createQueue(key: string, data: any) {
-    const queue = new Bull(key, {
+  private getQueue(key: string) {
+    return new Bull(key, {
       redis: {
         host: process.env.REDIS_HOST as string,
         port: parseInt(process.env.REDIS_PORT as string)
       }
     })
+  }
+
+  public createQueue(key: string, data: any) {
+    const queue = this.getQueue(key)
 
     queue.add(data, {
       attempts: 3,
@@ -18,16 +22,24 @@ export default class DelayJobBullMiddleware {
     })
   }
 
-  public workerQueue(key: string, consumer: (data: any) => void) {
-    const worker = new Bull(key, {
-      redis: {
-        host: process.env.REDIS_HOST as string,
-        port: parseInt(process.env.REDIS_PORT as string)
-      }
-    })
+  public workerQueue(key: string, consumer: (data: any, done: DoneCallback) => void) {
+    const worker = this.getQueue(key)
 
-    worker.process(async (job, done) => {
-      return consumer(job.data)
+    worker.process(async (job: Job, done: DoneCallback) => {
+      return consumer(job.data, done)
+    })
+  }
+
+  public async listJob(key: string) {
+    const job = this.getQueue(key)
+
+    const jobs = await job.getJobs(
+      ['waiting', 'active', 'completed', 'failed', 'delayed'],
+      0, -1, true
+    )
+
+    jobs.map(async job => {
+      console.log(`Job ${job.id}, data: ${job.data}, status: ${await job.getState()}`)
     })
   }
 }

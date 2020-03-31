@@ -1,8 +1,9 @@
 import { Server } from './app/application'
-import { consumerDelayJob } from './services/consumer.service'
+import { consumerKueDelayJob, consumerBullDelayJob } from './services/consumer.service'
 
 const server = new Server()
-consumerDelayJob()
+consumerKueDelayJob()
+consumerBullDelayJob()
 
 server.listen((port: number) => {
   console.log(`Server is listening on port: ${port}`)
