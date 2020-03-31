@@ -1,7 +1,7 @@
 import '../app/environment'
 import Bull from 'bull'
 
-export default class DelayJob {
+export default class DelayJobBullMiddleware {
   public createQueue(key: string, data: any) {
     const queue = new Bull(key, {
       redis: {

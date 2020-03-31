@@ -1,3 +1,3 @@
-import DelayJob from './delay-job.middleware'
+import DelayJobBullMiddleware from './delay-job-bull.middleware'
 
-export const delayJob = new DelayJob()
+export const delayJobBullMiddleware = new DelayJobBullMiddleware()
