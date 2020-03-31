@@ -24,14 +24,19 @@ export default class DelayJobKueMiddleware {
     })
   }
 
-  public listJob() {
+  public listJob(key?: string) {
     interface JobList extends Job {
       _state: string
     }
+
     Job.range(0, -1, 'asc', (err: Error, jobs: JobList[]) => {
       if (!err) {
         jobs.map(job => {
-          console.log(`Job ${job.id}, data: ${job.data}, status: ${job._state}`)
+          if (job.type === key) {
+            console.log(`Job ${job.id}, data: ${job.data}, status: ${job._state}`)
+          } else {
+            console.log(`Job ${job.id}, data: ${job.data}, status: ${job._state}`)
+          }
         })
       }
     })

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node ./src",
     "start:docker": "docker-compose up",
-    "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' ./src"
+    "dev": "nodemon --watch './src/**/*.ts' --exec 'ts-node' ./src/index.ts"
   },
   "keywords": [
     "node",

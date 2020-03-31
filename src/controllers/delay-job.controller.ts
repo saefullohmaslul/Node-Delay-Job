@@ -36,7 +36,7 @@ export default class DelayJobController {
     try {
       delayJobBullMiddleware.listJob('hello')
 
-      delayJobKueMiddleware.listJob()
+      delayJobKueMiddleware.listJob('hello')
 
       res.status(200).json({
         status: 200,
