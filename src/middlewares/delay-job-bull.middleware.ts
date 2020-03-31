@@ -1,5 +1,5 @@
 import '../app/environment'
-import Bull, { Job, DoneCallback } from 'bull'
+import Bull, { Job, DoneCallback, JobId } from 'bull'
 
 export default class DelayJobBullMiddleware {
   private getQueue(key: string) {
@@ -38,8 +38,21 @@ export default class DelayJobBullMiddleware {
       0, -1, true
     )
 
-    jobs.map(async job => {
+    const jobList: {
+      id: JobId,
+      data: any,
+      status: string
+    }[] = []
+
+    await Promise.all(jobs.map(async job => {
+      jobList.push({
+        id: job.id,
+        data: job.data,
+        status: await job.getState()
+      })
       console.log(`Job ${job.id}, data: ${job.data}, status: ${await job.getState()}`)
-    })
+    }))
+
+    return jobList
   }
 }

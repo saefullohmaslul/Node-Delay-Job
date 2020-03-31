@@ -28,20 +28,20 @@ export default class DelayJobController {
     }
   }
 
-  public getJob(
+  public async getJob(
     req: Request,
     res: Response,
     next: NextFunction
   ) {
     try {
-      delayJobBullMiddleware.listJob('hello')
+      const bullList = await delayJobBullMiddleware.listJob('hello')
 
-      delayJobKueMiddleware.listJob('hello')
+      await delayJobKueMiddleware.listJob('hello')
 
       res.status(200).json({
         status: 200,
-        messages: 'Success get hello',
-        result: 'sip'
+        messages: 'Success get job list',
+        result: bullList
       })
     } catch (error) {
       next(error)
