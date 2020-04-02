@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { delayJobBullMiddleware } from '../middlewares'
+import { delayJob } from '../utils'
 
 export default class DelayJobController {
   public get(
@@ -10,7 +10,7 @@ export default class DelayJobController {
     try {
       const hello = 'Hello'
 
-      delayJobBullMiddleware.createQueue('hello', {
+      delayJob.createQueue('hello', {
         payload: 'hello world'
       })
 
@@ -30,7 +30,7 @@ export default class DelayJobController {
     next: NextFunction
   ) {
     try {
-      const bullList = await delayJobBullMiddleware.listJob('hello')
+      const bullList = await delayJob.listJob('hello')
 
       res.status(200).json({
         status: 200,

@@ -1,7 +1,7 @@
-import '../app/environment'
+import '../../app/environment'
 import Bull, { Job, DoneCallback, JobId } from 'bull'
 
-export default class DelayJobBullMiddleware {
+export default class DelayJob {
   private getQueue(key: string) {
     return new Bull(key, {
       redis: {

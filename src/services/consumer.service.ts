@@ -1,8 +1,8 @@
-import { delayJobBullMiddleware } from '../middlewares'
+import { delayJob } from '../utils'
 
-export const consumerBullDelayJob = () => {
-  delayJobBullMiddleware.workerQueue('hello', (data: any, done) => {
-    console.log('bull', data)
+export const consumerDelayJob = () => {
+  delayJob.workerQueue('hello', (data: any, done) => {
+    console.log(data)
     done()
   })
 }
